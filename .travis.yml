@@ -11,9 +11,3 @@ deploy:
     secret_access_key: $AWS_SECRET_ACCESS_KEY
     function_name: travis-lambda-example
     runtime: python3.6
-env:
-  global:
-  - secure: AWS_DEFAULT_REGION
-  - secure: AWS_ACCESS_KEY_ID
-  - secure: AWS_SECRET_ACCESS_KEY
-  - secure: AWS_S3_BUCKET
