@@ -1,9 +1,44 @@
 language: python
-python: 3.6
+
+python: '3.6'
+sudo: false
+
+# We don't care about Travis' python versions, we install conda anyway
+env:
+  global:
+    - AWS_DEFAULT_REGION=us-east-2
+    - PYTHONPATH=$TRAVIS_BUILD_DIR:$PYTHONPATH
+
+install:
+  - pip install awscli
+  - pip install boto3
+
+  # install libs from the requirements of each single lambda
+  - pip install -r src/lambda/requirements.txt
+
+script:
+  # run tests
+  # - py.test -vv -r sxX
+  - echo "Hello world"
+
+before_deploy:
+  - mkdir -p dist
+  # create zip for each lambda folder in src
+  - .travis/build_lambda.sh src/lambda
+  - cp src/*.zip dist
+
 deploy:
-  provider: lambda
-  access_key_id: $AWS_ACCESS_KEY_ID
+  provider:          s3
+  access_key_id:     $AWS_ACCESS_KEY_ID
   secret_access_key: $AWS_SECRET_ACCESS_KEY
-  function_name: travis-lambda-example
-  edge: true
-  runtime: python3.6
+  bucket:            $AWS_BUCKET
+  region:            $AWS_BUCKET_REGION
+  local_dir:         dist
+  upload-dir:        deployments/lambdas/travis_build
+  acl:               private # keep them private
+  skip_cleanup:      true
+  on:
+    all_branches: true
+
+notifications:
+  email: true
