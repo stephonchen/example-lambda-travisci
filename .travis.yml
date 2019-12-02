@@ -8,7 +8,7 @@ install:
 - pip install aws-sam-cli
 script:
 - sam validate
-- sam package --template-file template.yaml --s3-bucket <your-bucket-name> --output-template-file packaged.yaml
+- sam package --template-file template.yaml --s3-bucket $AWS_S3_BUCKET --output-template-file packaged.yaml
 deploy:
   provider: script
   script: sam deploy --template-file packaged.yaml --stack-name travis-lambda-example
@@ -21,5 +21,6 @@ notifications:
 env:
   global:
   - AWS_DEFAULT_REGION=us-east-2
-  - secure: <obfuscated AWS Access Key>
-  - secure: <obfuscated AWS Secret Key>
+  - secure: AWS_ACCESS_KEY
+  - secure: AWS_SECRET_KEY
+  - secure: AWS_S3_BUCKET
