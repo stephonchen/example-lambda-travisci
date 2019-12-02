@@ -1,4 +1,5 @@
 language: python
+python: 3.6
 deploy:
   provider: lambda
   access_key_id: $AWS_ACCESS_KEY_ID
