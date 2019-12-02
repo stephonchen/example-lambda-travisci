@@ -1,14 +1,16 @@
 language: python
 python:
-- '3.6'
+  - '3.6'
 branches:
   only: master
 deploy:
-  provider: lambda
-  region: $AWS_DEFAULT_REGION
-  access_key_id: $AWS_ACCESS_KEY_ID
-  secret_access_key: $AWS_SECRET_ACCESS_KEY
-  function_name: travis-lambda-example
+  - provider: lambda
+    edge: true
+    region: $AWS_DEFAULT_REGION
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    function_name: travis-lambda-example
+    runtime: python3.6
 env:
   global:
   - secure: AWS_DEFAULT_REGION
