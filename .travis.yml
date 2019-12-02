@@ -1,7 +1,9 @@
 language: python
 
 python: '3.6'
-sudo: false
+
+os: linux
+
 
 # We don't care about Travis' python versions, we install conda anyway
 env:
@@ -34,9 +36,9 @@ deploy:
   bucket:            $AWS_BUCKET
   region:            $AWS_BUCKET_REGION
   local_dir:         dist
-  upload-dir:        deployments/lambdas/travis_build
+  upload_dir:        deployments/lambdas/travis_build
   acl:               private # keep them private
-  skip_cleanup:      true
+  cleanup:           true
   on:
     all_branches: true
 
