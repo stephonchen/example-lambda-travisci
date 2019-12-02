@@ -1,26 +1,17 @@
 language: python
 python:
-- '3.8'
+- '3.6'
 branches:
   only: master
-install:
-- pip install awscli
-- pip install aws-sam-cli
-script:
-- sam validate
-- sam package --template-file template.yaml --s3-bucket $AWS_S3_BUCKET --output-template-file packaged.yaml
 deploy:
-  provider: script
-  script: sam deploy --template-file packaged.yaml --stack-name travis-lambda-example
-  skip_cleanup: true
-  on:
-    branch: master
-notifications:
-  email:
-    on_failure: always
+  provider: lambda
+  access_key_id: $AWS_ACCESS_KEY_ID
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
+  function_name: travis-lambda-example
+  edge: true
 env:
   global:
-  - AWS_DEFAULT_REGION=us-east-2
-  - secure: AWS_ACCESS_KEY
-  - secure: AWS_SECRET_KEY
+  - secure: AWS_DEFAULT_REGION
+  - secure: AWS_ACCESS_KEY_ID
+  - secure: AWS_SECRET_ACCESS_KEY
   - secure: AWS_S3_BUCKET
