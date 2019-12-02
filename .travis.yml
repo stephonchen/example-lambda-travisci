@@ -9,7 +9,6 @@ deploy:
   access_key_id: $AWS_ACCESS_KEY_ID
   secret_access_key: $AWS_SECRET_ACCESS_KEY
   function_name: travis-lambda-example
-  edge: true
 env:
   global:
   - secure: AWS_DEFAULT_REGION
