@@ -1,5 +1,7 @@
 # example-lambda-travisci
 * Lambda deployment using TravisCI as Example
+* Lambda function
+  * Shutdown running EC2 instances with tag:Environment=Staging
 
 # AWS Configuration
 * Create an IAM user for TravisCI deployment
