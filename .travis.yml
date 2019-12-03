@@ -6,7 +6,6 @@ sudo: false
 # We don't care about Travis' python versions, we install conda anyway
 env:
   global:
-    - AWS_DEFAULT_REGION=us-east-2
     - PYTHONPATH=$TRAVIS_BUILD_DIR:$PYTHONPATH
 
 install:
