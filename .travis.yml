@@ -17,8 +17,7 @@ install:
 
 script:
   # run tests
-  # - py.test -vv -r sxX
-  - echo "Hello world"
+  - py.test -vv -r sxX
 
 before_deploy:
   - mkdir -p dist
