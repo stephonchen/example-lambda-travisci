@@ -1,7 +1,16 @@
 # example-lambda-travisci
-* Lambda deployment using TravisCI as Example
+* Lambda deployment using Travis CI as Example
 * Lambda function
   * Shutdown running EC2 instances with tag:Environment=Staging
+
+# Travis CI Configuration
+* Please configure these environment variables in Travis CI:
+```
+AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY
+AWS_BUCKET_REGION
+AWS_LAMBDA_FUNCTION_NAME
+```
 
 # AWS Configuration
 * Create an IAM user for TravisCI deployment
@@ -54,6 +63,7 @@
 
 # Note
 * (Beta) Travis CI deployment to AWS Lambda is still in Beta, and use at your own risk.
+* Tests of Lambda function are not well-defined yet.
 
 # References
 * https://docs.travis-ci.com/user/deployment-v2/providers/lambda/
