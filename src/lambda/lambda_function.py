@@ -16,16 +16,13 @@ def lambda_handler(event, context):
     filters = [
         {
             'Name': str('tag:' + parameters['tag']),
-            'Values': str('stopped' if 'stop' == parameters['tag_value'] else parameters['tag_value'])
+            'Values': str(parameters['tag_value'])
+        },
+        {
+            'Name': 'instance-state-name',
+            'Values': [str('stopped' if 'stop' == parameters['tag_value'] else parameters['tag_value'])]
         }
     ]
-    # Add more filters according to EC2Action
-    if 'stop' == parameters['EC2Action'] or 'reboot' == parameters['EC2Action']:
-        EC2Action = "{'Name':'instance-state-name','Values': ['running']}"
-    elif 'start' == parameters['EC2Action']:
-        EC2Action = "{'Name':'instance-state-name','Values': ['stopped']}"
-
-    filters.append(EC2Action)
 
     #filter the instances
     instances = ec2.instances.filter(Filters=filters)
