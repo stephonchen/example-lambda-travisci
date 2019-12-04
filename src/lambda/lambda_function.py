@@ -44,7 +44,7 @@ def lambda_handler(event, context):
             'statusCode': 200,
             'body': json.dumps({
                 'time': CurrentTime,
-                str(EC2Action + '_instances'): str(InstancesID)
+                str(parameters['EC2Action'] + '_instances'): str(InstancesID)
             })
         }
     else:
@@ -52,6 +52,6 @@ def lambda_handler(event, context):
             'statusCode': 404,
             'body': json.dumps({
                 'time': CurrentTime,
-                str(EC2Action + '_instances'): "No any instances found, so no need to shutdown."
+                str(parameters['EC2Action'] + '_instances'): "No any instances found, so no need to shutdown."
             })
         }
