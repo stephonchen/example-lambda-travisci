@@ -7,7 +7,7 @@ ec2 = boto3.resource('ec2')
 
 def lambda_handler(event, context):
     # Get current time
-    current_time = time.strftime("%Y-%m-%d %H:%M:%S")
+    CurrentTime = time.strftime("%Y-%m-%d %H:%M:%S")
 
     # Use the filter() method of the instances collection to retrieve
     # all running EC2 instances.
@@ -35,7 +35,7 @@ def lambda_handler(event, context):
         return {
             'statusCode': 200,
             'body': json.dumps({
-                'time': current_time,
+                'time': CurrentTime,
                 'stopping_instances': str(RunningInstances)
             })
         }
@@ -43,7 +43,7 @@ def lambda_handler(event, context):
         return {
             'statusCode': 404,
             'body': json.dumps({
-                'time': current_time,
+                'time': CurrentTime,
                 'stopping_instances': "No any instances found, so no need to shutdown."
             })
         }
