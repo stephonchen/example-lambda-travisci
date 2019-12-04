@@ -36,6 +36,7 @@ def lambda_handler(event, context):
             'statusCode': 200,
             'body': json.dumps({
                 'time': current_time,
+                'debug':str(event),
                 'stopping_instances': str(RunningInstances)
             })
         }
@@ -44,6 +45,7 @@ def lambda_handler(event, context):
             'statusCode': 404,
             'body': json.dumps({
                 'time': current_time,
-                'stopping_instances': "No any instances found, so no need to shutdown."
+                'debug':str(event),
+                'stopping_instances': "No any instances found, so no need to shutdown.",
             })
         }
