@@ -13,9 +13,10 @@ def lambda_handler(event, context):
     parameters = event['queryStringParameters']
 
     # Use the filter() method of the instances collection to retrieve all instances
-    filters = [{
+    filters = [
+        {
             'Name': str('tag:' + parameters['tag']),
-            'Values': [str(parameters['tag_value'])]
+            'Values': str('stopped' if 'stop' == parameters['tag_value'] else parameters['tag_value'])
         }
     ]
     # Add more filters according to EC2Action
