@@ -7,17 +7,20 @@ ec2 = boto3.resource('ec2')
 
 def lambda_handler(event, context):
     # Get current time
-    current_time = time.strftime("%Y-%m-%d %H:%M:%S")
+    CurrentTime = time.strftime("%Y-%m-%d %H:%M:%S")
 
-    # Use the filter() method of the instances collection to retrieve
-    # all running EC2 instances.
-    filters = [{
-            'Name': 'tag:Environment',
-            'Values': ['Staging']
+    # 'queryStringParameters': {'tag_value': 'Staging', 'tag': 'Environment', 'EC2Action': 'start/stop/reboot'}
+    parameters = event['queryStringParameters']
+
+    # Use the filter() method of the instances collection to retrieve all instances
+    filters = [
+        {
+            'Name': str('tag:' + parameters['tag']),
+            'Values': [str(parameters['tag_value'])]
         },
         {
             'Name': 'instance-state-name',
-            'Values': ['running']
+            'Values': [str('running' if 'stop' == parameters['EC2Action'] or 'reboot' == parameters['EC2Action'] else 'stopped')]
         }
     ]
 
@@ -25,25 +28,30 @@ def lambda_handler(event, context):
     instances = ec2.instances.filter(Filters=filters)
 
     #locate all running instances
-    RunningInstances = [instance.id for instance in instances]
+    InstancesID = [instance.id for instance in instances]
 
     #make sure there are actually instances to shut down.
-    if len(RunningInstances) > 0:
-        #perform the shutdown
-        shuttingDown = ec2.instances.filter(InstanceIds=RunningInstances).stop()
+    if len(InstancesID) > 0:
+        #perform EC2 actions
+        if 'stop' == parameters['EC2Action']:
+            EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).stop()
+        elif 'start' == parameters['EC2Action']:
+            EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).start()
+        elif 'reboot' == parameters['EC2Action']:
+            EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).reboot()
 
         return {
             'statusCode': 200,
             'body': json.dumps({
-                'time': current_time,
-                'stopping_instances': str(RunningInstances)
+                'time': CurrentTime,
+                str(parameters['EC2Action'] + '_instances'): str(InstancesID)
             })
         }
     else:
         return {
             'statusCode': 404,
             'body': json.dumps({
-                'time': current_time,
-                'stopping_instances': "No any instances found, so no need to shutdown."
+                'time': CurrentTime,
+                str(parameters['EC2Action'] + '_instances'): "No any instances found, so no need to shutdown."
             })
         }

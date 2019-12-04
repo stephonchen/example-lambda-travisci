@@ -1,7 +1,7 @@
 # example-lambda-travisci
 * Lambda deployment using Travis CI as Example
 * Lambda function
-  * Shutdown running EC2 instances with tag:Environment=Staging
+  * Start/Stop/Reboot EC2 instances with tag:Environment=Staging
 
 # Travis CI Configuration
 * Please configure these environment variables in Travis CI:
@@ -58,6 +58,16 @@ AWS_LAMBDA_FUNCTION_NAME
       "Resource": "arn:aws:iam::<account-id>:role/*"
     }
   ]
+}
+```
+
+# API gateway
+* Example JSON data for stopping EC2 instances with tag:Environment=Staging
+```
+{
+    "tag": "Environment",
+    "tag_value": "Staging",
+    "EC2Action": "stop"
 }
 ```
 
