@@ -20,10 +20,8 @@ script:
   - py.test -vv -r sxX
 
 before_deploy:
-  - mkdir -p dist
-  # create zip for each lambda folder in src
-  - .travis/build_lambda.sh src/lambda
-  - cp src/*.zip dist
+  - cp -Rp src/lambda/* ./
+  - rm -rf tests README.md src
 
 deploy:
   provider:          lambda
