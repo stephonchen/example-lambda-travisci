@@ -20,7 +20,7 @@ def lambda_handler(event, context):
         },
         {
             'Name': 'instance-state-name',
-            'Values': [str('stopped' if 'stop' == parameters['tag_value'] else parameters['tag_value'])]
+            'Values': [str('stopped' if 'stop' == parameters['EC2Action'] else 'running')]
         }
     ]
 
