@@ -44,6 +44,6 @@ def lambda_handler(event, context):
             'statusCode': 404,
             'body': json.dumps({
                 'time': current_time,
-                'stopping_instances': "No any instances found"
+                'stopping_instances': "No any instances found, so no need to shutdown."
             })
         }
