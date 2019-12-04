@@ -31,7 +31,7 @@ def lambda_handler(event, context):
     if len(RunningInstances) > 0:
         #perform the shutdown
         shuttingDown = ec2.instances.filter(InstanceIds=RunningInstances).stop()
-        print "Test"
+
         return {
             'statusCode': 200,
             'body': json.dumps({
