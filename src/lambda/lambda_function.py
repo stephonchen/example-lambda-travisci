@@ -9,11 +9,13 @@ def lambda_handler(event, context):
     # Get current time
     CurrentTime = time.strftime("%Y-%m-%d %H:%M:%S")
 
+    # 'queryStringParameters': {'tag_value': 'Staging', 'tag': 'Environment'}
+    parameters = event['queryStringParameters']
     # Use the filter() method of the instances collection to retrieve
     # all running EC2 instances.
     filters = [{
-            'Name': 'tag:Environment',
-            'Values': ['Staging']
+            'Name': str('tag:' + parameters['tag']),
+            'Values': [str(parameters['tag_value'])]
         },
         {
             'Name': 'instance-state-name',
