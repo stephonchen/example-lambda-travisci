@@ -16,7 +16,7 @@ def lambda_handler(event, context):
     filters = [
         {
             'Name': str('tag:' + parameters['tag']),
-            'Values': str(parameters['tag_value'])
+            'Values': [str(parameters['tag_value'])]
         },
         {
             'Name': 'instance-state-name',
