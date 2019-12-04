@@ -9,36 +9,44 @@ def lambda_handler(event, context):
     # Get current time
     CurrentTime = time.strftime("%Y-%m-%d %H:%M:%S")
 
-    # 'queryStringParameters': {'tag_value': 'Staging', 'tag': 'Environment'}
+    # 'queryStringParameters': {'tag_value': 'Staging', 'tag': 'Environment', 'EC2Action': 'start/stop/reboot'}
     parameters = event['queryStringParameters']
-    # Use the filter() method of the instances collection to retrieve
-    # all running EC2 instances.
+
+    # Use the filter() method of the instances collection to retrieve all instances
     filters = [{
             'Name': str('tag:' + parameters['tag']),
             'Values': [str(parameters['tag_value'])]
-        },
-        {
-            'Name': 'instance-state-name',
-            'Values': ['running']
         }
     ]
+    # Add more filters according to EC2Action
+    if 'stop' == parameters['EC2Action'] or 'reboot' == parameters['EC2Action']:
+        EC2Action = "{'Name':'instance-state-name','Values': ['running']}"
+    elif 'start' == parameters['EC2Action']:
+        EC2Action = "{'Name':'instance-state-name','Values': ['stopped']}"
+
+    filters.append(EC2Action)
 
     #filter the instances
     instances = ec2.instances.filter(Filters=filters)
 
     #locate all running instances
-    RunningInstances = [instance.id for instance in instances]
+    InstancesID = [instance.id for instance in instances]
 
     #make sure there are actually instances to shut down.
-    if len(RunningInstances) > 0:
-        #perform the shutdown
-        shuttingDown = ec2.instances.filter(InstanceIds=RunningInstances).stop()
+    if len(InstancesID) > 0:
+        #perform EC2 actions
+        if 'stop' == parameters['EC2Action']:
+            EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).stop()
+        elif 'start' == parameters['EC2Action']:
+            EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).start()
+        elif 'reboot' == parameters['EC2Action']:
+            EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).reboot()
 
         return {
             'statusCode': 200,
             'body': json.dumps({
                 'time': CurrentTime,
-                'stopping_instances': str(RunningInstances)
+                str(EC2Action + '_instances'): str(InstancesID)
             })
         }
     else:
@@ -46,6 +54,6 @@ def lambda_handler(event, context):
             'statusCode': 404,
             'body': json.dumps({
                 'time': CurrentTime,
-                'stopping_instances': "No any instances found, so no need to shutdown."
+                str(EC2Action + '_instances'): "No any instances found, so no need to shutdown."
             })
         }
