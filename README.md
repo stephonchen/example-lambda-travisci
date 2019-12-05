@@ -10,7 +10,15 @@ AWS_ACCESS_KEY_ID
 AWS_SECRET_ACCESS_KEY
 AWS_BUCKET_REGION
 AWS_LAMBDA_FUNCTION_NAME
+AWS_LAMBDA_HANDLER_NAME
+AWS_IAM_ROLE
 ```
+* Example
+  * AWS_LAMBDA_FUNCTION_NAME: lamdba-blah
+  * AWS_LAMBDA_HANDLER_NAME: lambda_function.lambda_handler
+    * Please refer to src/lambda/lambda_function.py for details
+  * AWS_IAM_ROLE: arn:aws:BLAHBLAH
+    * Note: in ARN format
 
 # AWS Configuration
 * Create an IAM user for TravisCI deployment
@@ -60,6 +68,7 @@ AWS_LAMBDA_FUNCTION_NAME
   ]
 }
 ```
+* Create an IAM role and attach policy above
 
 # API gateway
 * Example JSON data for stopping EC2 instances with tag:Environment=Staging
