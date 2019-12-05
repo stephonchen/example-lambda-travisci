@@ -29,12 +29,12 @@ def lambda_handler(event, context):
     #make sure there are actually instances to shut down.
     if len(InstancesID) > 0:
         #perform EC2 actions
-        if 'stop' == RequestBody['EC2Action']:
-            EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).stop()
-        elif 'start' == RequestBody['EC2Action']:
-            EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).start()
-        elif 'reboot' == RequestBody['EC2Action']:
-            EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).reboot()
+#        if 'stop' == RequestBody['EC2Action']:
+#            EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).stop()
+#        elif 'start' == RequestBody['EC2Action']:
+#            EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).start()
+#        elif 'reboot' == RequestBody['EC2Action']:
+#            EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).reboot()
 
         return {
             'statusCode': 200,
