@@ -9,18 +9,18 @@ def lambda_handler(event, context):
     # Get current time
     CurrentTime = time.strftime("%Y-%m-%d %H:%M:%S")
 
-    # 'queryStringParameters': {'tag_value': 'Staging', 'tag': 'Environment', 'EC2Action': 'start/stop/reboot'}
-    parameters = event['queryStringParameters']
+    # Use request body instead of queryStrings
+    RequestBody = event['body']
 
     # Use the filter() method of the instances collection to retrieve all instances
     filters = [
         {
-            'Name': str('tag:' + parameters['tag']),
-            'Values': [str(parameters['tag_value'])]
+            'Name': str('tag:' + RequestBody['tag']),
+            'Values': [str(RequestBody['tag_value'])]
         },
         {
             'Name': 'instance-state-name',
-            'Values': [str('running' if 'stop' == parameters['EC2Action'] or 'reboot' == parameters['EC2Action'] else 'stopped')]
+            'Values': [str('running' if 'stop' == RequestBody['EC2Action'] or 'reboot' == RequestBody['EC2Action'] else 'stopped')]
         }
     ]
 
@@ -33,11 +33,11 @@ def lambda_handler(event, context):
     #make sure there are actually instances to shut down.
     if len(InstancesID) > 0:
         #perform EC2 actions
-        if 'stop' == parameters['EC2Action']:
+        if 'stop' == RequestBody['EC2Action']:
             EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).stop()
-        elif 'start' == parameters['EC2Action']:
+        elif 'start' == RequestBody['EC2Action']:
             EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).start()
-        elif 'reboot' == parameters['EC2Action']:
+        elif 'reboot' == RequestBody['EC2Action']:
             EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).reboot()
 
         return {
@@ -45,7 +45,7 @@ def lambda_handler(event, context):
             'body': json.dumps({
                 'time': CurrentTime,
                 'debug': str(event),
-                str(parameters['EC2Action'] + '_instances'): str(InstancesID)
+                str(RequestBody['EC2Action'] + '_instances'): str(InstancesID)
             })
         }
     else:
@@ -54,6 +54,6 @@ def lambda_handler(event, context):
             'body': json.dumps({
                 'time': CurrentTime,
                 'debug': str(event),
-                str(parameters['EC2Action'] + '_instances'): "No any instances found, so no need to shutdown."
+                str(RequestBody['EC2Action'] + '_instances'): "No any instances found, so no need to shutdown."
             })
         }
