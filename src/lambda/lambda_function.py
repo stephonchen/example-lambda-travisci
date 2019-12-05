@@ -2,13 +2,14 @@ import boto3
 import json
 import time
 
-#define the connection
+# define the connection
 ec2 = boto3.resource('ec2')
+
 
 def lambda_handler(event, context):
     # Get current time
     CurrentTime = time.strftime("%Y-%m-%d %H:%M:%S")
-
+    print("test"+event)
     # 'queryStringParameters': {'tag_value': 'Staging', 'tag': 'Environment', 'EC2Action': 'start/stop/reboot'}
     parameters = event['queryStringParameters']
 
@@ -24,21 +25,24 @@ def lambda_handler(event, context):
         }
     ]
 
-    #filter the instances
+    # filter the instances
     instances = ec2.instances.filter(Filters=filters)
 
-    #locate all running instances
+    # locate all running instances
     InstancesID = [instance.id for instance in instances]
 
-    #make sure there are actually instances to shut down.
+    # make sure there are actually instances to shut down.
     if len(InstancesID) > 0:
-        #perform EC2 actions
+        # perform EC2 actions
         if 'stop' == parameters['EC2Action']:
-            EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).stop()
+            EC2ActionStatus = ec2.instances.filter(
+                InstanceIds=InstancesID).stop()
         elif 'start' == parameters['EC2Action']:
-            EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).start()
+            EC2ActionStatus = ec2.instances.filter(
+                InstanceIds=InstancesID).start()
         elif 'reboot' == parameters['EC2Action']:
-            EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).reboot()
+            EC2ActionStatus = ec2.instances.filter(
+                InstanceIds=InstancesID).reboot()
 
         return {
             'statusCode': 200,
