@@ -13,17 +13,11 @@ def lambda_handler(event, context):
     RequestBody = event['body']
 
     # Use the filter() method of the instances collection to retrieve all instances
-    filters = []
-#    filters = [
-#        {
-#            'Name': str('tag:' + RequestBody['tag']),
-#            'Values': [str(RequestBody['tag_value'])]
-#        },
-#        {
-#            'Name': 'instance-state-name',
-#            'Values': [str('running' if 'stop' == RequestBody['EC2Action'] or 'reboot' == RequestBody['EC2Action'] else 'stopped')]
-#        }
-#    ]
+    filters = [
+        {
+            'Name': 'tag:Environment',
+            'Values': ['Staging']
+    ]
 
     #filter the instances
     instances = ec2.instances.filter(Filters=filters)
