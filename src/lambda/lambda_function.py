@@ -15,12 +15,12 @@ def lambda_handler(event, context):
     # Use the filter() method of the instances collection to retrieve all instances
     filters = [
         {
-            'Name': str('tag:' + RequestBody['tag']),
-            'Values': [str(RequestBody['tag_value'])]
+            'Name': 'tag:Environment',
+            'Values': ['Staging']
         },
         {
             'Name': 'instance-state-name',
-            'Values': [str('running' if 'stop' == RequestBody['EC2Action'] or 'reboot' == RequestBody['EC2Action'] else 'stopped')]
+            'Values': ['running']
         }
     ]
 
@@ -33,18 +33,14 @@ def lambda_handler(event, context):
     #make sure there are actually instances to shut down.
     if len(InstancesID) > 0:
         #perform EC2 actions
-        if 'stop' == RequestBody['EC2Action']:
-            EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).stop()
-        elif 'start' == RequestBody['EC2Action']:
+        elif 'start' == RequestBody['queryResult']['fulfillmentText']:
             EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).start()
-        elif 'reboot' == RequestBody['EC2Action']:
-            EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).reboot()
 
         return {
             'statusCode': 200,
             'body': json.dumps({
                 'time': CurrentTime,
-                str(RequestBody['EC2Action'] + '_instances'): str(InstancesID)
+                str('start' + '_instances'): str(InstancesID)
             })
         }
     else:
@@ -52,6 +48,6 @@ def lambda_handler(event, context):
             'statusCode': 404,
             'body': json.dumps({
                 'time': CurrentTime,
-                str(RequestBody['EC2Action'] + '_instances'): "No any instances found, so no need to shutdown."
+                str('start' + '_instances'): "No any instances found, so no need to shutdown."
             })
         }
