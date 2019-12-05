@@ -58,6 +58,29 @@ AWS_IAM_ROLE
       ]
     },
     {
+        "Sid": "CreatePutLogs",
+        "Effect": "Allow",
+        "Action": [
+            "logs:CreateLogStream",
+	    "logs:CreateLogGroup",
+            "logs:PutLogEvents"
+        ],
+        "Resource": "arn:aws:logs:<region>:<account-id>:log-group:/aws/lambda/<name-of-function>:*"
+    },
+    {
+        "Sid": "EC2Actions",
+        "Effect": "Allow",
+        "Action": [
+            "ec2:RebootInstances",
+            "ec2:DescribeInstances",
+            "ec2:StartInstances",
+            "ec2:DescribeTags",
+            "ec2:StopInstances",
+            "ec2:DescribeInstanceStatus"
+        ],
+        "Resource": "*"
+    },
+    {
      "Sid": "SetRole",
       "Effect": "Allow",
       "Action": [
