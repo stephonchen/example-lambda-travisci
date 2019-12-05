@@ -58,6 +58,16 @@ AWS_IAM_ROLE
       ]
     },
     {
+        "Sid": "CreatePutLogs",
+        "Effect": "Allow",
+        "Action": [
+            "logs:CreateLogStream",
+	    "logs:CreateLogGroup",
+            "logs:PutLogEvents"
+        ],
+        "Resource": "arn:aws:logs:<region>:<account-id>:log-group:/aws/lambda/<name-of-function>:*"
+    },
+    {
         "Sid": "EC2Actions",
         "Effect": "Allow",
         "Action": [
