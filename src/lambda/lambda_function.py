@@ -45,7 +45,8 @@ def lambda_handler(event, context):
             'body': json.dumps({
                 'time': CurrentTime,
                 'debug': str(event),
-                str(RequestBody['EC2Action'] + '_instances'): str(InstancesID)
+                'debug2': str(RequestBody)
+#                str(RequestBody['EC2Action'] + '_instances'): str(InstancesID)
             })
         }
     else:
@@ -54,6 +55,7 @@ def lambda_handler(event, context):
             'body': json.dumps({
                 'time': CurrentTime,
                 'debug': str(event),
-                str(RequestBody['EC2Action'] + '_instances'): "No any instances found, so no need to shutdown."
+                'debug2': str(RequestBody)
+#                str(RequestBody['EC2Action'] + '_instances'): "No any instances found, so no need to shutdown."
             })
         }
