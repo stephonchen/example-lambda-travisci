@@ -9,11 +9,7 @@ ec2 = boto3.resource('ec2')
 def lambda_handler(event, context):
     # Get current time
     CurrentTime = time.strftime("%Y-%m-%d %H:%M:%S")
-<<<<<<< HEAD
     print(event)
-=======
-    print("test"+event)
->>>>>>> b1c72394a2d2645bab8b318030fe02cf34a54a53
     # 'queryStringParameters': {'tag_value': 'Staging', 'tag': 'Environment', 'EC2Action': 'start/stop/reboot'}
     parameters = event['queryStringParameters']
 
