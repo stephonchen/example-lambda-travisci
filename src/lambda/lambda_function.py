@@ -20,7 +20,7 @@ def lambda_handler(event, context):
         },
         {
             'Name': 'instance-state-name',
-            'Values': ['stopped']
+            'Values': [str('stopped') if 'Power Up' == RequestBody['queryResult']['intent']['displayName'] else str('running')]
         }
     ]
 
@@ -35,12 +35,14 @@ def lambda_handler(event, context):
         #perform EC2 actions
         if 'Power Up' == RequestBody['queryResult']['intent']['displayName']:
             EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).start()
+        elif 'Power Down' == RequestBody['queryResult']['intent']['displayName']:
+            EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).stop()
 
         return {
             'statusCode': 200,
             'body': json.dumps({
                 'time': CurrentTime,
-                str('start' + '_instances'): str(InstancesID)
+                str(str(RequestBody['queryResult']['intent']['displayName']) + '_instances'): str(InstancesID)
             })
         }
     else:
@@ -48,6 +50,6 @@ def lambda_handler(event, context):
             'statusCode': 404,
             'body': json.dumps({
                 'time': CurrentTime,
-                str('start' + '_instances'): "No any instances found, so no need to shutdown."
+                str(str(RequestBody['queryResult']['intent']['displayName']) + '_instances'): "No any instances found, so no need to shutdown."
             })
         }
