@@ -33,7 +33,7 @@ def lambda_handler(event, context):
     #make sure there are actually instances to shut down.
     if len(InstancesID) > 0:
         #perform EC2 actions
-        elif 'start' == RequestBody['queryResult']['queryText']:
+        if 'Power Up' == RequestBody['intent']['displayName']:
             EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).start()
 
         return {
