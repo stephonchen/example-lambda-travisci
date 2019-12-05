@@ -17,6 +17,7 @@ def lambda_handler(event, context):
         {
             'Name': 'tag:Environment',
             'Values': ['Staging']
+        }
     ]
 
     #filter the instances
