@@ -20,7 +20,7 @@ def lambda_handler(event, context):
         },
         {
             'Name': 'instance-state-name',
-            'Values': ['running']
+            'Values': ['stopped']
         }
     ]
 
