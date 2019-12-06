@@ -41,15 +41,13 @@ def lambda_handler(event, context):
         return {
             'statusCode': 200,
             'body': json.dumps({
-                'time': CurrentTime,
-                str(str(RequestBody['queryResult']['intent']['displayName']) + '_instances'): str(InstancesID)
+                'fulfillmentText': str(str(RequestBody['queryResult']['intent']['displayName']) + '_instances: ' + str(InstancesID))
             })
         }
     else:
         return {
-            'statusCode': 404,
+            'statusCode': 204,
             'body': json.dumps({
-                'time': CurrentTime,
-                str(str(RequestBody['queryResult']['intent']['displayName']) + '_instances'): "No any instances found, so no need to shutdown."
+                'fulfillmentText': "No any instances found, so no need to shutdown."
             })
         }
