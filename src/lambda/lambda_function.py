@@ -46,8 +46,8 @@ def lambda_handler(event, context):
         }
     else:
         return {
-            'statusCode': 204,
+            'statusCode': 200,
             'body': json.dumps({
-                'fulfillmentText': "No any instances found, so no need to shutdown."
+                'fulfillmentText': 'No any instances found, so no need to shutdown.'
             })
         }
