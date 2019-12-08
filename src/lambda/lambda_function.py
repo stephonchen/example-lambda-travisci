@@ -33,7 +33,6 @@ def lambda_handler(event, context):
     InstancesID = [instance.id for instance in instances]
 
     # make sure there are actually instances to shut down.
-    returnMessage = ""
     if len(InstancesID) > 0:
         # perform EC2 actions
         if 'Power Up' == RequestBody['queryResult']['intent']['displayName']:
@@ -42,24 +41,22 @@ def lambda_handler(event, context):
         elif 'Power Down' == RequestBody['queryResult']['intent']['displayName']:
             EC2ActionStatus = ec2.instances.filter(
                 InstanceIds=InstancesID).stop()
-        returnMessage = json.dumps({
-            'fulfillmentText': str(str(RequestBody['queryResult']['intent']['displayName']) + '_instances: ' + str(InstancesID))
-        })
         response = sns.publish(
-            TopicArn='arn:aws:sns:us-east-2:274867232613:polar-bear-chatbox-topic', Message=returnMessage)
+            TopicArn='arn:aws:sns:us-east-2:274867232613:polar-bear-chatbox-topic', Message='EC2 instance: '+str(InstancesID)+' was '+str(RequestBody['queryResult']['intent']['displayName']))
         print(response)
         return {
             'statusCode': 200,
-            'body': returnMessage
+            'body': json.dumps({
+                'fulfillmentText': str(str(RequestBody['queryResult']['intent']['displayName']) + '_instances: ' + str(InstancesID))
+            })
         }
     else:
-        returnMessage = json.dumps({
-            'fulfillmentText': 'No any instances found.'
-        })
         response = sns.publish(
-            TopicArn='arn:aws:sns:us-east-2:274867232613:polar-bear-chatbox-topic', Message=returnMessage)
+            TopicArn='arn:aws:sns:us-east-2:274867232613:polar-bear-chatbox-topic', Message='No any instances found.')
         print(response)
         return {
             'statusCode': 200,
-            'body': returnMessage
+            'body': json.dumps({
+                'fulfillmentText': 'No any instances found.'
+            })
         }
