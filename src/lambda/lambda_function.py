@@ -46,7 +46,7 @@ def lambda_handler(event, context):
             'fulfillmentText': str(str(RequestBody['queryResult']['intent']['displayName']) + '_instances: ' + str(InstancesID))
         })
         sns.publish(
-            TopicArn='arn:aws:sns:us-east-1:274867232613:polar-bear-chatbox-topic', Message=returnMessage,)
+            TopicArn='arn:aws:sns:us-east-2:274867232613:polar-bear-chatbox-topic', Message=returnMessage)
         return {
             'statusCode': 200,
             'body': returnMessage
@@ -56,7 +56,7 @@ def lambda_handler(event, context):
             'fulfillmentText': 'No any instances found.'
         })
         sns.publish(
-            TopicArn='arn:aws:sns:us-east-1:274867232613:polar-bear-chatbox-topic', Message=returnMessage,)
+            TopicArn='arn:aws:sns:us-east-2:274867232613:polar-bear-chatbox-topic', Message=returnMessage)
         return {
             'statusCode': 200,
             'body': returnMessage
