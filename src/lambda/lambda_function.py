@@ -45,8 +45,9 @@ def lambda_handler(event, context):
         returnMessage = json.dumps({
             'fulfillmentText': str(str(RequestBody['queryResult']['intent']['displayName']) + '_instances: ' + str(InstancesID))
         })
-        sns.publish(
+        response = sns.publish(
             TopicArn='arn:aws:sns:us-east-2:274867232613:polar-bear-chatbox-topic', Message=returnMessage)
+        print(response)
         return {
             'statusCode': 200,
             'body': returnMessage
@@ -55,6 +56,7 @@ def lambda_handler(event, context):
         returnMessage = json.dumps({
             'fulfillmentText': 'No any instances found.'
         })
+        print(response)
         sns.publish(
             TopicArn='arn:aws:sns:us-east-2:274867232613:polar-bear-chatbox-topic', Message=returnMessage)
         return {
