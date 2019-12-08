@@ -1,3 +1,4 @@
+from lambdas.lambda_function import *
 import pytest
 
 def test_lambda_handler():
