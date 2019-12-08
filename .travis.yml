@@ -17,7 +17,6 @@ install:
 
 script:
   # run tests
-  - ln -sf src/lambda src/lambdas
   - py.test -vv -r sxX
 
 before_deploy:
