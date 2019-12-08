@@ -8,6 +8,15 @@ sns = boto3.client('sns')
 
 
 def lambda_handler(event, context):
+    # For test fulfillment
+    if (not event or not context):
+        return {
+            'statusCode': 200,
+            'body': json.dumps({
+                'fulfillmentText': 'Hello World!'
+            })
+        }
+
     # Get current time
     CurrentTime = time.strftime("%Y-%m-%d %H:%M:%S")
 
