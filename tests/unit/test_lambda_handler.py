@@ -1,7 +1,7 @@
 import sys
 import boto3
 sys.path.insert(0, '../src/lambda')
-import lambda_function
+from lambda_function import *
 
 def test_lambda_handler(event_context):
     event = []
