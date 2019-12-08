@@ -2,8 +2,10 @@ import boto3
 import json
 import time
 
-#define the connection
+# define the connection
 ec2 = boto3.resource('ec2')
+sns = boto3.client('sns')
+
 
 def lambda_handler(event, context):
     # Get current time
@@ -24,30 +26,38 @@ def lambda_handler(event, context):
         }
     ]
 
-    #filter the instances
+    # filter the instances
     instances = ec2.instances.filter(Filters=filters)
 
-    #locate all running instances
+    # locate all running instances
     InstancesID = [instance.id for instance in instances]
 
-    #make sure there are actually instances to shut down.
+    # make sure there are actually instances to shut down.
+    returnMessage = ""
     if len(InstancesID) > 0:
-        #perform EC2 actions
+        # perform EC2 actions
         if 'Power Up' == RequestBody['queryResult']['intent']['displayName']:
-            EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).start()
+            EC2ActionStatus = ec2.instances.filter(
+                InstanceIds=InstancesID).start()
         elif 'Power Down' == RequestBody['queryResult']['intent']['displayName']:
-            EC2ActionStatus = ec2.instances.filter(InstanceIds=InstancesID).stop()
-
+            EC2ActionStatus = ec2.instances.filter(
+                InstanceIds=InstancesID).stop()
+        returnMessage = json.dumps({
+            'fulfillmentText': str(str(RequestBody['queryResult']['intent']['displayName']) + '_instances: ' + str(InstancesID))
+        })
+        sns.publish(
+            TopicArn='arn:aws:sns:us-east-1:274867232613:polar-bear-chatbox-topic', Message=returnMessage,)
         return {
             'statusCode': 200,
-            'body': json.dumps({
-                'fulfillmentText': str(str(RequestBody['queryResult']['intent']['displayName']) + '_instances: ' + str(InstancesID))
-            })
+            'body': returnMessage
         }
     else:
+        returnMessage = json.dumps({
+            'fulfillmentText': 'No any instances found.'
+        })
+        sns.publish(
+            TopicArn='arn:aws:sns:us-east-1:274867232613:polar-bear-chatbox-topic', Message=returnMessage,)
         return {
             'statusCode': 200,
-            'body': json.dumps({
-                'fulfillmentText': 'No any instances found.'
-            })
+            'body': returnMessage
         }
