@@ -1,5 +1,7 @@
-from lambda.lambda_function import *
-import pytest
+import sys
+import boto3
+sys.path.insert(0, '../src/lambda')
+import lambda_function
 
 def test_lambda_handler(event_context):
     event = []
