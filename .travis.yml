@@ -19,7 +19,7 @@ install:
 script:
   # run tests
   - py.test -vv -r sxX
-  - flake8 --statistics --count --ignore E226,E501,F841 --max-line-length=120 src/lambda/lambda_function.py
+  - flake8 --statistics --count --exit-zero src/lambda/lambda_function.py
 
 before_deploy:
   - cp -Rp src/lambda/* ./
