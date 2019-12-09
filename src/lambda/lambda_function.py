@@ -41,13 +41,9 @@ def lambda_handler(event, context):
         instances = ec2.instances.filter(
             Filters=[{'Name': 'instance-state-name', 'Values': ['running', 'stopped']}])
         returnMessage = ''
-        if len(instances) == 0:
-            returnMessage = '你的帳號底下完全沒有機器，請稍後再說，謝謝'
-        else:
-            for instance in instances:
-                returnMessage = returnMessage + 'instance id: ' + \
-                    instance.id + ' ('+instance.state+')\n'
-
+        for instance in instances:
+            returnMessage = returnMessage + 'instance id: ' + \
+                instance.id + ' ('+instance.state+')\n'
         return returnMessage
 
     # locate all running instances
