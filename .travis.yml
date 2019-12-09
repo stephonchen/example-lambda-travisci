@@ -11,6 +11,7 @@ env:
 install:
   - pip install awscli
   - pip install boto3
+  - pip install flake8
 
   # install libs from the requirements of each single lambda
   - pip install -r src/lambda/requirements.txt
@@ -18,10 +19,12 @@ install:
 script:
   # run tests
   - py.test -vv -r sxX
+  - flake8 --statistics --count --ignore F841 --max-line-length=120 src/lambda/lambda_function.py
 
 before_deploy:
   - cp -Rp src/lambda/* ./
   - rm -rf tests README.md src
+  - pip -y uninstall flake8
 
 deploy:
   provider:          lambda
