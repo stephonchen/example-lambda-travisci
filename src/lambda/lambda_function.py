@@ -42,8 +42,8 @@ def lambda_handler(event, context):
             Filters=[{'Name': 'instance-state-name', 'Values': ['running', 'stopped']}])
         returnMessage = ''
         for instance in instances:
-            returnMessage = returnMessage + 'instance id: ' + \
-                str(instance.id) + ' (' + str(instance.state) + ')\n'
+            returnMessage = returnMessage + '以下是已經被北極熊這隻熊控管的機器清單:\n' + \
+                str(instance.id) + ' (' + str(instance.state.name) + ')\n'
         return {
             'statusCode': 200,
             'body': json.dumps({
