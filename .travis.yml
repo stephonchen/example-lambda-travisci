@@ -28,7 +28,7 @@ deploy:
   access_key_id:     $AWS_ACCESS_KEY_ID
   secret_access_key: $AWS_SECRET_ACCESS_KEY
   region:            $AWS_DEFAULT_REGION
-  function_name:     $AWS_LAMBDA_FUNCTION_NAME
+  function_name:     $AWS_LAMBDA_FUNCTION_NAME_PRODUCTION
   handler:           $AWS_LAMBDA_HANDLER_NAME
   role:              $AWS_IAM_ROLE
   runtime:           python3.6
