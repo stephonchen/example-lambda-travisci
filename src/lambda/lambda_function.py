@@ -44,30 +44,33 @@ def lambda_handler(event, context):
     # make sure there are actually instances to shut down.
     if len(InstancesID) > 0:
         # perform EC2 actions
+        returnMessage = ''
         if 'Power Up' == RequestBody['queryResult']['intent']['displayName']:
             EC2ActionStatus = ec2.instances.filter(
                 InstanceIds=InstancesID).start()
+            returnMessage = '太棒了！你的 EC2 instance: ' + \
+                str(InstancesID)+' 已經打開囉！！！幹活吧！少年！'
             response = sns.publish(
                 TopicArn='arn:aws:sns:us-east-2:274867232613:polar-bear-chatbox-topic',
-                Message='EC2 instance: '+str(InstancesID)+' was turned on.')
+                Message=returnMessage)
         elif 'Power Down' == RequestBody['queryResult']['intent']['displayName']:
             EC2ActionStatus = ec2.instances.filter(
                 InstanceIds=InstancesID).stop()
+            returnMessage = '太棒了！你的 EC2 instance: ' + \
+                str(InstancesID)+' 已經關掉了！！！洗洗睡吧！少年仔！你每天可以省下8美金喔！多多益善！'
             response = sns.publish(
-                TopicArn='arn:aws:sns:us-east-2:274867232613:polar-bear-chatbox-topic', Message='EC2 instance: '+str(InstancesID)+' was turned off. You will save $0.0116 per hour.')
+                TopicArn='arn:aws:sns:us-east-2:274867232613:polar-bear-chatbox-topic', Message=returnMessage)
         return {
             'statusCode': 200,
-            'body': json.dumps({
-                'fulfillmentText': str(str(RequestBody['queryResult']['intent']['displayName']) + '_instances: ' + str(InstancesID))
-            })
+            'body': json.dumps({'fulfillmentText': returnMessage})
         }
     else:
         response = sns.publish(
-            TopicArn='arn:aws:sns:us-east-2:274867232613:polar-bear-chatbox-topic', Message='No any instances found.')
+            TopicArn='arn:aws:sns:us-east-2:274867232613:polar-bear-chatbox-topic', Message='沒有符合機器拉！不要亂命令！')
         print(response)
         return {
             'statusCode': 200,
             'body': json.dumps({
-                'fulfillmentText': 'No any instances found.'
+                'fulfillmentText': '沒有符合機器拉！不要亂命令！'
             })
         }
