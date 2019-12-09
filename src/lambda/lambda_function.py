@@ -43,7 +43,7 @@ def lambda_handler(event, context):
         returnMessage = ''
         for instance in instances:
             returnMessage = returnMessage + 'instance id: ' + \
-                instance.id + ' ('+instance.state+')\n'
+                str(instance.id) + ' (' + str(instance.state) + ')\n'
         return returnMessage
 
     # locate all running instances
