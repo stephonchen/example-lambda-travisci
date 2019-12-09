@@ -39,10 +39,10 @@ def lambda_handler(event, context):
 
     if 'list' == RequestBody['queryResult']['intent']['displayName']:
         instances = ec2.instances.filter(
-            Filters=[{'Name': 'instance-state-name', 'Values': ['running', 'stopped']}])
+            Filters=[{'Name': 'instance-state-name', 'Values': ['running', 'stopped']}, {'Name': 'tag:Environment', 'Values': ['Staging']}])
         returnMessage = ''
         for instance in instances:
-            returnMessage = returnMessage + '以下是已經被北極熊這隻熊控管的機器清單:\n' + \
+            returnMessage = returnMessage + '以下是已經被北極熊這隻熊控管的機器清單:' + \
                 str(instance.id) + ' (' + str(instance.state.name) + ')\n'
         return {
             'statusCode': 200,
