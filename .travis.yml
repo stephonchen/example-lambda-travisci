@@ -24,7 +24,7 @@ script:
 before_deploy:
   - cp -Rp src/lambda/* ./
   - rm -rf tests README.md src
-  - pip -y uninstall flake8
+  - pip uninstall -y flake8
 
 deploy:
   provider:          lambda
