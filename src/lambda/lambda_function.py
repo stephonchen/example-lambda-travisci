@@ -47,12 +47,14 @@ def lambda_handler(event, context):
         if 'Power Up' == RequestBody['queryResult']['intent']['displayName']:
             EC2ActionStatus = ec2.instances.filter(
                 InstanceIds=InstancesID).start()
+            response = sns.publish(
+                TopicArn='arn:aws:sns:us-east-2:274867232613:polar-bear-chatbox-topic',
+                Message='EC2 instance: '+str(InstancesID)+' was turned on.')
         elif 'Power Down' == RequestBody['queryResult']['intent']['displayName']:
             EC2ActionStatus = ec2.instances.filter(
                 InstanceIds=InstancesID).stop()
-        response = sns.publish(
-            TopicArn='arn:aws:sns:us-east-2:274867232613:polar-bear-chatbox-topic', Message='EC2 instance: '+str(InstancesID)+' was '+str(RequestBody['queryResult']['intent']['displayName']))
-        print(response)
+            response = sns.publish(
+                TopicArn='arn:aws:sns:us-east-2:274867232613:polar-bear-chatbox-topic', Message='EC2 instance: '+str(InstancesID)+' was turned off. You will save $0.0116 per hour.')
         return {
             'statusCode': 200,
             'body': json.dumps({
