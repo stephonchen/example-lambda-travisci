@@ -43,7 +43,7 @@ def lambda_handler(event, context):
         returnMessage = '以下是已經被北極熊這隻熊控管的機器清單:'
         for instance in instances:
             returnMessage = returnMessage + \
-                str(instance.id) + ' (' + str(instance.state) + ')\n'
+                str(instance.id) + ' (' + str(instance.state['Name']) + '),'
         return {
             'statusCode': 200,
             'body': json.dumps({
