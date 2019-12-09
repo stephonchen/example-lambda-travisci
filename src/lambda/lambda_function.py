@@ -49,7 +49,7 @@ def lambda_handler(event, context):
             EC2ActionStatus = ec2.instances.filter(
                 InstanceIds=InstancesID).start()
             returnMessage = '太棒了！你的 EC2 instance: ' + \
-                str(InstancesID)+' 已經打開囉！！！幹活吧！少年！'
+                str(InstancesID)+' 已經打開囉！！！幹活吧！少年機器開始運轉囉!就像我們的愛情摩天輪一樣！'
             response = sns.publish(
                 TopicArn='arn:aws:sns:us-east-2:274867232613:polar-bear-chatbox-topic',
                 Message=returnMessage)
@@ -57,7 +57,7 @@ def lambda_handler(event, context):
             EC2ActionStatus = ec2.instances.filter(
                 InstanceIds=InstancesID).stop()
             returnMessage = '太棒了！你的 EC2 instance: ' + \
-                str(InstancesID)+' 已經關掉了！！！洗洗睡吧！少年仔！你每天可以省下8美金喔！多多益善！'
+                str(InstancesID)+' 已經關掉了！！！洗洗睡吧！少年仔！你每天可以省下8美金喔！多多益善！發大財!'
             response = sns.publish(
                 TopicArn='arn:aws:sns:us-east-2:274867232613:polar-bear-chatbox-topic', Message=returnMessage)
         return {
