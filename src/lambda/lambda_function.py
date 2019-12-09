@@ -44,7 +44,12 @@ def lambda_handler(event, context):
         for instance in instances:
             returnMessage = returnMessage + 'instance id: ' + \
                 str(instance.id) + ' (' + str(instance.state) + ')\n'
-        return returnMessage
+        return {
+            'statusCode': 200,
+            'body': json.dumps({
+                'fulfillmentText': returnMessage
+            })
+        }
 
     # locate all running instances
     instances = ec2.instances.filter(Filters=filters)
